@@ -12,6 +12,11 @@ const server = net.createServer((c) => {
 	var local_context = vm.createContext({console: console});
 	var buf = '';
 
+
+	c.on('error', (e) => {
+		console.log('Error happened', e);
+
+	});	
 	c.on('end', () => {
 		console.log('client disconnected');
 
