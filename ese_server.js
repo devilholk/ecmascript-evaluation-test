@@ -56,7 +56,15 @@ const server = net.createServer((c) => {
 				}
 			}
 
-			c.write(JSON.stringify({result: returns}) + '\n');
+			var to_return;
+			try {
+				to_return = JSON.stringify({result: returns}) + '\n';				
+			} catch (e) {
+				console.error(e);
+				to_return = JSON.stringify({error: e.message}) + '\n';
+			}
+
+			c.write(to_return);
 		}	
 	});
 });
