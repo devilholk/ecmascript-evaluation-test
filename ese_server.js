@@ -1,6 +1,8 @@
 const net = require('net');
 const vm = require('vm');
+const fs = require('fs');
 const server = net.createServer((c) => {
+
 
 /*
 	The context is created with the connection so a connection can be seen as a session.
@@ -9,7 +11,21 @@ const server = net.createServer((c) => {
 */
 
 	console.log('client connected');
-	var local_context = vm.createContext({console: console});
+	var local_context = vm.createContext({
+		console: console,
+	});
+
+	local_context.run = code => {
+		var script = new vm.Script(code);
+		script.runInContext(local_context);
+	};
+
+	local_context.eval_file = filename => {			
+		var js = fs.readFileSync(filename, 'utf8');
+		local_context.run(js);
+	};
+
+
 	var buf = '';
 
 
