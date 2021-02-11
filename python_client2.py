@@ -32,8 +32,27 @@ def test2():
 	asyncio.run(run_test())
 
 
-test1()
+def test3():
+	print('Test of primitive HTML DOM')
+	with node_evaluator_client.connection('localhost', 9876) as test:
+		print(test('''
+			eval_file('dom.js');
 
-print()
-test2()
-		
+			var root = new HTMLElement();
+			root.appendChild(new HTMLElement('body', {onload: '"stuff();"'}));
+			console.log(root.bodyToHTML());
+
+			
+		''', 
+		[],
+		preset=dict(
+		)))
+
+
+# test1()
+# print()
+# test2()
+
+
+
+test3()
